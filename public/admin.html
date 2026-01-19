@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SannForums Code</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i> SannForums <span>Code</span>
+                </a>
+                <nav>
+                    <a href="index.html" class="btn">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div id="admin-login" style="max-width: 400px; margin: 4rem auto; text-align: center;">
+                <h2 style="margin-bottom: 1.5rem;">Admin Login</h2>
+                <div class="form-group">
+                    <input type="password" id="admin-key" class="form-control" placeholder="Enter admin key">
+                </div>
+                <button id="login-btn" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </div>
+
+            <div id="admin-panel" style="display: none;">
+                <div class="admin-header">
+                    <h2>Manage Code Snippets</h2>
+                    <button id="new-snippet-btn" class="btn btn-success">
+                        <i class="fas fa-plus"></i> New Snippet
+                    </button>
+                </div>
+
+                <div class="snippet-form-container" style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius); padding: 2rem; margin-bottom: 3rem;">
+                    <h3 id="form-title">Create New Snippet</h3>
+                    <form id="snippet-form">
+                        <input type="hidden" id="snippet-id">
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="title">Title *</label>
+                            <input type="text" id="title" class="form-control" required placeholder="My Awesome Function">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="language">Language *</label>
+                            <select id="language" class="form-control" required>
+                                <option value="">Select a language</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="html">HTML</option>
+                                <option value="css">CSS</option>
+                                <option value="java">Java</option>
+                                <option value="php">PHP</option>
+                                <option value="cpp">C++</option>
+                                <option value="csharp">C#</option>
+                                <option value="go">Go</option>
+                                <option value="rust">Rust</option>
+                                <option value="typescript">TypeScript</option>
+                                <option value="sql">SQL</option>
+                                <option value="bash">Bash/Shell</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="description">Description (Optional)</label>
+                            <textarea id="description" class="form-control" rows="3" placeholder="Describe what this code does..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="code">Code *</label>
+                            <textarea id="code" class="form-control" rows="15" required placeholder="Paste your code here..."></textarea>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Snippet
+                            </button>
+                            <button type="button" id="delete-btn" class="btn btn-danger" style="display: none;">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                            <button type="button" id="cancel-btn" class="btn">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="snippets-list">
+                    <p style="text-align: center; color: var(--text-secondary);">
+                        Loading snippets...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer style="background-color: var(--secondary-color); padding: 2rem 0; margin-top: 4rem; text-align: center;">
+        <div class="container">
+            <p>&copy; 2024 SannForums Code. All rights reserved.</p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                Admin Panel - For authorized users only
+            </p>
+        </div>
+    </footer>
+
+    <div id="alert" class="alert"></div>
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
