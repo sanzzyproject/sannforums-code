@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SannForums Code - Share Code Snippets</title>
+    <meta name="description" content="Share and discover code snippets instantly. No login required.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i> SannForums <span>Code</span>
+                </a>
+                <nav>
+                    <a href="admin.html" class="btn btn-primary" id="admin-btn">
+                        <i class="fas fa-lock"></i> Admin
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <section class="hero">
+                <h1>Share Code Snippets Instantly</h1>
+                <p>A simple, clean platform to share and discover code snippets. No login required. Permanent storage powered by GitHub.</p>
+                <div style="margin-top: 2rem;">
+                    <a href="admin.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.75rem 2rem;">
+                        <i class="fas fa-plus"></i> Create New Snippet
+                    </a>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>Permanent Storage</h3>
+                    <p>All code snippets are stored permanently in GitHub repositories. Never lose your code.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>No Database</h3>
+                    <p>Built without traditional databases. GitHub acts as your file-based storage system.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Real-time Stats</h3>
+                    <p>Track views and copies in real-time. See how popular your snippets are.</p>
+                </div>
+            </section>
+
+            <section style="margin-top: 4rem; text-align: center;">
+                <h2>How It Works</h2>
+                <div style="max-width: 600px; margin: 2rem auto;">
+                    <ol style="text-align: left; line-height: 2;">
+                        <li>Admin creates a code snippet with title, language, and description</li>
+                        <li>System generates a unique URL for sharing</li>
+                        <li>Anyone can view the code with syntax highlighting</li>
+                        <li>Stats are tracked automatically</li>
+                        <li>Code is permanently stored in GitHub</li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer style="background-color: var(--secondary-color); padding: 2rem 0; margin-top: 4rem; text-align: center;">
+        <div class="container">
+            <p>&copy; 2024 SannForums Code. All rights reserved.</p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                Built with Node.js, GitHub API, and deployed on Vercel
+            </p>
+        </div>
+    </footer>
+
+    <div id="alert" class="alert"></div>
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
