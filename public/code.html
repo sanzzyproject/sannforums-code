@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Code Snippet - SannForums Code</title>
+    <meta property="og:title" content="Code Snippet">
+    <meta property="og:description" content="View this code snippet on SannForums Code">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i> SannForums <span>Code</span>
+                </a>
+                <nav>
+                    <a href="index.html" class="btn">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="code-container" id="code-container">
+                <div class="code-header">
+                    <div>
+                        <h1 id="code-title">Loading...</h1>
+                        <div class="code-meta">
+                            Created: <span id="code-created">...</span> | 
+                            Updated: <span id="code-updated">...</span>
+                            <span id="code-language"></span>
+                        </div>
+                    </div>
+                    <button id="copy-btn" class="btn btn-primary">
+                        <i class="fas fa-copy"></i> Copy Code
+                    </button>
+                </div>
+                
+                <div class="code-description">
+                    <p id="code-description">Loading description...</p>
+                </div>
+                
+                <div class="code-wrapper">
+                    <pre><code id="code-content" class="code-content">Loading code...</code></pre>
+                </div>
+                
+                <div style="padding: 1rem; background-color: var(--secondary-color); border-top: 1px solid var(--border-color);">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span>Views:</span>
+                            <span class="count" id="views-count">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-copy"></i>
+                            <span>Copies:</span>
+                            <span class="count" id="copies-count">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="index.html" class="btn">
+                    <i class="fas fa-plus"></i> Create Your Own Snippet
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer style="background-color: var(--secondary-color); padding: 2rem 0; margin-top: 4rem; text-align: center;">
+        <div class="container">
+            <p>&copy; 2024 SannForums Code. All rights reserved.</p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                Share this URL to let others view this code snippet
+            </p>
+        </div>
+    </footer>
+
+    <div id="alert" class="alert"></div>
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
