@@ -226,4 +226,233 @@ if (window.location.pathname.includes('admin.html')) {
       adminKey = key;
       isAuthenticated = true;
       
-      // Show admin panel
+            // Show admin panel
+      if (adminPanel) {
+        adminPanel.style.display = 'block';
+        adminKeyInput.parentElement.style.display = 'none';
+        showAlert('Admin login successful', 'success');
+        
+        // Load snippets
+        await loadSnippets();
+      }
+    });
+    
+    // Load all snippets
+    async function loadSnippets() {
+      try {
+        showLoading();
+        
+        // In a real implementation, you'd need to list all snippet files
+        // For simplicity, we'll assume you maintain an index file
+        // For now, we'll create a placeholder message
+        if (snippetsList) {
+          snippetsList.innerHTML = '<p>Loading snippets...</p>';
+        }
+        
+        // Note: GitHub API doesn't easily allow listing all files in a folder
+        // without additional setup. You might need to maintain an index.json
+        // or use GitHub Search API
+        
+        showAlert('Admin panel loaded', 'success');
+      } catch (error) {
+        showAlert('Failed to load snippets: ' + error.message, 'error');
+      } finally {
+        hideLoading();
+      }
+    }
+    
+    // Create/Update snippet
+    snippetForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById('title').value;
+      const language = document.getElementById('language').value;
+      const description = document.getElementById('description').value;
+      const code = document.getElementById('code').value;
+      const snippetId = snippetIdInput?.value;
+      
+      if (!title || !language || !code) {
+        showAlert('Please fill in all required fields', 'error');
+        return;
+      }
+      
+      try {
+        showLoading();
+        
+        const payload = {
+          title,
+          language,
+          description,
+          code
+        };
+        
+        if (isEditing && snippetId) {
+          // Update existing
+          payload.id = snippetId;
+          
+          const response = await fetch(`${API_BASE}/admin/update`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Admin-Key': adminKey
+            },
+            body: JSON.stringify(payload)
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            showAlert('Snippet updated successfully', 'success');
+            resetForm();
+            await loadSnippets();
+          } else {
+            throw new Error(data.error);
+          }
+        } else {
+          // Create new
+          const response = await fetch(`${API_BASE}/admin/create`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Admin-Key': adminKey
+            },
+            body: JSON.stringify(payload)
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            showAlert(`Snippet created! Share URL: ${data.url}`, 'success');
+            resetForm();
+            await loadSnippets();
+          } else {
+            throw new Error(data.error);
+          }
+        }
+      } catch (error) {
+        showAlert('Error: ' + error.message, 'error');
+      } finally {
+        hideLoading();
+      }
+    });
+    
+    // Delete snippet
+    deleteBtn?.addEventListener('click', async () => {
+      const snippetId = snippetIdInput?.value;
+      
+      if (!snippetId) {
+        showAlert('No snippet selected to delete', 'error');
+        return;
+      }
+      
+      if (!confirm('Are you sure you want to delete this snippet? This action cannot be undone.')) {
+        return;
+      }
+      
+      try {
+        showLoading();
+        
+        const response = await fetch(`${API_BASE}/admin/delete`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Admin-Key': adminKey
+          },
+          body: JSON.stringify({ id: snippetId })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          showAlert('Snippet deleted successfully', 'success');
+          resetForm();
+          await loadSnippets();
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (error) {
+        showAlert('Error: ' + error.message, 'error');
+      } finally {
+        hideLoading();
+      }
+    });
+    
+    // Reset form
+    function resetForm() {
+      if (snippetForm) snippetForm.reset();
+      if (formTitle) formTitle.textContent = 'Create New Snippet';
+      if (deleteBtn) deleteBtn.style.display = 'none';
+      if (snippetIdInput) snippetIdInput.value = '';
+      isEditing = false;
+    }
+    
+    // Edit snippet
+    function editSnippet(snippet) {
+      isEditing = true;
+      
+      document.getElementById('title').value = snippet.title;
+      document.getElementById('language').value = snippet.language;
+      document.getElementById('description').value = snippet.description || '';
+      
+      // Load code content
+      loadCodeContent(snippet.id).then(code => {
+        document.getElementById('code').value = code;
+      });
+      
+      if (formTitle) formTitle.textContent = 'Edit Snippet';
+      if (deleteBtn) deleteBtn.style.display = 'inline-flex';
+      if (snippetIdInput) snippetIdInput.value = snippet.id;
+      
+      // Scroll to form
+      snippetForm?.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Load code content
+    async function loadCodeContent(id) {
+      try {
+        const response = await fetch(`${API_BASE}/code/${id}`);
+        const data = await response.json();
+        
+        if (data.success) {
+          return data.code;
+        }
+      } catch (error) {
+        console.error('Failed to load code:', error);
+        return '';
+      }
+    }
+  });
+}
+
+// Home Page
+if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add any home page specific functionality here
+    console.log('Home page loaded');
+    
+    // Example: Create new snippet button for admin
+    const adminBtn = document.getElementById('admin-btn');
+    if (adminBtn) {
+      adminBtn.addEventListener('click', () => {
+        window.location.href = 'admin.html';
+      });
+    }
+  });
+}
+
+// Escape HTML function (missing from previous code)
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// Add CSS for syntax highlighting
+const style = document.createElement('style');
+style.textContent = `
+  .hl-keyword { color: #d73a49; font-weight: bold; }
+  .hl-string { color: #032f62; }
+  .hl-number { color: #005cc5; }
+  .hl-comment { color: #6a737d; font-style: italic; }
+`;
+document.head.appendChild(style);
