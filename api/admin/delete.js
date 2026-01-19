@@ -1,5 +1,5 @@
-import GitHubStorage from "../../../lib/github.js";
-import { requireAdmin, corsHeaders } from "../../../lib/auth.js";
+import GitHubStorage from "../../lib/github.js";
+import { requireAdmin, corsHeaders } from "../../lib/auth.js";
 
 export default async function handler(req, res) {
   // Handle CORS preflight
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       return res.status(405).json({ error: "Method not allowed" });
     }
 
-    const { id } = req.query;
+    const { id } = req.body;
 
     if (!id) {
       return res.status(400).json({ error: "Missing snippet ID" });
