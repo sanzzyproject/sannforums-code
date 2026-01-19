@@ -1,5 +1,5 @@
-import GitHubStorage from "../../../lib/github.js";
-import { corsHeaders } from "../../../lib/auth.js";
+import GitHubStorage from "../lib/github.js";
+import { corsHeaders } from "../lib/auth.js";
 
 export default async function handler(req, res) {
   // Handle CORS preflight
@@ -7,15 +7,18 @@ export default async function handler(req, res) {
     return res.status(200).json({});
   }
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
   try {
-    const { id } = req.query;
-
-    if (!id) {
-      return res.status(400).json({ error: "Missing snippet ID" });
+    // Split the URL to get action and id
+    const path = req.url.split('/');
+    const action = path[2]; // 'view' or 'copy'
+    const id = path[3]; // snippet ID
+    
+    if (!action || !id) {
+      return res.status(400).json({ error: "Missing action or ID" });
+    }
+    
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Method not allowed" });
     }
 
     const github = new GitHubStorage();
@@ -27,10 +30,10 @@ export default async function handler(req, res) {
       // Initialize stats if not exists
       const initialStats = {
         id,
-        views: 1,
-        copies: 0,
-        lastViewed: new Date().toISOString(),
-        lastCopied: null,
+        views: action === 'view' ? 1 : 0,
+        copies: action === 'copy' ? 1 : 0,
+        lastViewed: action === 'view' ? new Date().toISOString() : null,
+        lastCopied: action === 'copy' ? new Date().toISOString() : null,
       };
 
       await github.createFile(
@@ -47,13 +50,19 @@ export default async function handler(req, res) {
 
     // Update existing stats
     const stats = JSON.parse(statsResult.data);
-    stats.views = (stats.views || 0) + 1;
-    stats.lastViewed = new Date().toISOString();
+    
+    if (action === 'view') {
+      stats.views = (stats.views || 0) + 1;
+      stats.lastViewed = new Date().toISOString();
+    } else if (action === 'copy') {
+      stats.copies = (stats.copies || 0) + 1;
+      stats.lastCopied = new Date().toISOString();
+    }
 
     const updateResult = await github.updateFile(
       `stats/${id}.json`,
       JSON.stringify(stats, null, 2),
-      `Update view count: ${id}`,
+      `Update ${action} count: ${id}`,
       statsResult.sha
     );
 
@@ -66,7 +75,7 @@ export default async function handler(req, res) {
       stats,
     });
   } catch (error) {
-    console.error("Update view stats error:", error);
+    console.error("Update stats error:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 }
