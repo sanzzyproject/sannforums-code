@@ -1,5 +1,5 @@
-import GitHubStorage from "../../../lib/github.js";
-import { requireAdmin, corsHeaders } from "../../../lib/auth.js";
+import GitHubStorage from "../../lib/github.js";
+import { requireAdmin, corsHeaders } from "../../lib/auth.js";
 
 export default async function handler(req, res) {
   // Handle CORS preflight
@@ -15,8 +15,7 @@ export default async function handler(req, res) {
       return res.status(405).json({ error: "Method not allowed" });
     }
 
-    const { id } = req.query;
-    const { title, language, description, code } = req.body;
+    const { id, ...updateData } = req.body;
 
     if (!id) {
       return res.status(400).json({ error: "Missing snippet ID" });
@@ -36,9 +35,7 @@ export default async function handler(req, res) {
     // Update snippet metadata
     const updatedSnippet = {
       ...currentSnippet,
-      title: title || currentSnippet.title,
-      language: language || currentSnippet.language,
-      description: description !== undefined ? description : currentSnippet.description,
+      ...updateData,
       updatedAt: new Date().toISOString(),
     };
 
@@ -55,13 +52,13 @@ export default async function handler(req, res) {
     }
 
     // Update code file if provided
-    if (code) {
+    if (updateData.code) {
       const codeResult = await github.getFileSHA(`codes/${id}.txt`);
       
       if (codeResult.success) {
         await github.updateFile(
           `codes/${id}.txt`,
-          code,
+          updateData.code,
           `Update code for: ${updatedSnippet.title}`,
           codeResult.sha
         );
@@ -81,11 +78,3 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Internal server error" });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "10mb",
-    },
-  },
-};
