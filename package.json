@@ -1,0 +1,16 @@
+{
+  "name": "sannforums-code",
+  "version": "1.0.0",
+  "description": "GitHub Gist-like code sharing platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@octokit/rest": "^19.0.7",
+    "nanoid": "^5.0.3"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
